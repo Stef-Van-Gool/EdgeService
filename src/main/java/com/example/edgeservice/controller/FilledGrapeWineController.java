@@ -35,6 +35,25 @@ public class FilledGrapeWineController {
         return new FilledGrapeWine(grape, wine);
     }
 
+    @GetMapping("/combo/wines")
+    public List<FilledGrapeWine> getWinesAndGrapes(){
+        List<FilledGrapeWine> returnList = new ArrayList<>();
+
+        ResponseEntity<List<Wine>> responseEntityWines =
+                restTemplate.exchange("http://" + wineServiceBaseUrl + "/wines",
+                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Wine>>() {
+                        });
+
+        List<Wine> wines = responseEntityWines.getBody();
+        for (Wine wine: wines) {
+            Grape grape =
+                    restTemplate.getForObject("http://" + grapeServiceBaseUrl + "/grapes/grapename/{grapeName}",
+                            Grape.class, wine.getGrapeName());
+            returnList.add(new FilledGrapeWine(grape, wine));
+        }
+        return returnList;
+    }
+
     @GetMapping("/combo/region/{region}")
     public List<FilledGrapeWine> getWinesAndGrapesByRegion(@PathVariable String region){
         List<FilledGrapeWine> returnList = new ArrayList<>();
