@@ -25,14 +25,13 @@ public class FilledGrapeWineController {
     @Value("${grapeservice.baseurl}")
     private String grapeServiceBaseUrl;
 
-    @GetMapping("/wines/{grapeName}")
-    public FilledGrapeWine getWinesByGrape(@PathVariable String grapeName){
-        Grape grape = restTemplate.getForObject("http://" + grapeServiceBaseUrl + "/grapes/grapename/{grapeName}",
-                Grape.class, grapeName);
-
-        Wine wine = restTemplate.getForObject("http://" + wineServiceBaseUrl + "/wines/grape/" + grapeName,
+    @GetMapping("/combo/wine/{name}")
+    public FilledGrapeWine getGrapeByWine(@PathVariable String name){
+        Wine wine = restTemplate.getForObject("http://" + wineServiceBaseUrl + "/wines/name/{name}" + name,
                 Wine.class);
 
+        Grape grape = restTemplate.getForObject("http://" + grapeServiceBaseUrl + "/grapes/grapename/{grapeName}",
+                        Grape.class, wine.getGrapeName());
         return new FilledGrapeWine(grape, wine);
     }
 
@@ -44,6 +43,7 @@ public class FilledGrapeWineController {
                 restTemplate.exchange("http://" + wineServiceBaseUrl + "/wines/region/{region}",
                         HttpMethod.GET, null, new ParameterizedTypeReference<List<Wine>>() {
                         }, region);
+
         List<Wine> wines = responseEntityWines.getBody();
         for (Wine wine: wines) {
             Grape grape =
@@ -51,8 +51,24 @@ public class FilledGrapeWineController {
                             Grape.class, wine.getGrapeName());
             returnList.add(new FilledGrapeWine(grape, wine));
         }
-
         return returnList;
     }
 
+    @GetMapping("/combo/country/{country}")
+    public List<FilledGrapeWine> getWinesAndGrapesByCountry(@PathVariable String country){
+        List<FilledGrapeWine> returnList = new ArrayList<>();
+
+        ResponseEntity<List<Wine>> responseEntityWines =
+                restTemplate.exchange("http://" + wineServiceBaseUrl + "/wines/country/{country}",
+                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Wine>>() {
+                        }, country);
+        List<Wine> wines = responseEntityWines.getBody();
+        for (Wine wine: wines) {
+            Grape grape =
+                    restTemplate.getForObject("http://" + grapeServiceBaseUrl + "/grapes/grapename/{grapeName}",
+                            Grape.class, wine.getGrapeName());
+            returnList.add(new FilledGrapeWine(grape, wine));
+        }
+        return returnList;
+    }
 }
