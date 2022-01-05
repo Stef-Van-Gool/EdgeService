@@ -91,7 +91,20 @@ public class FilledGrapeWineController {
         return returnList;
     }
 
-    @PutMapping("/wines")
+    @PostMapping("/combo")
+    public FilledGrapeWine addWine(@RequestParam String name, @RequestParam String region,
+                                   @RequestParam String country, @RequestParam double score, @RequestParam String grapeName) {
+        Wine wine =
+                restTemplate.postForObject("http://" + wineServiceBaseUrl + "/wines",
+                        new Wine(name, region, country, score, grapeName), Wine.class);
+
+        Grape grape = restTemplate.getForObject("http://" + grapeServiceBaseUrl + "/grapes/grapename/{grapeName}",
+                Grape.class, grapeName);
+
+        return new FilledGrapeWine(grape, wine);
+    }
+
+    @PutMapping("/combo")
     public FilledGrapeWine updateScore(@RequestParam String name, double score){
         Wine wine = restTemplate.getForObject("http://" + wineServiceBaseUrl + "/wines/name/{name}" + name,
                 Wine.class);
@@ -110,16 +123,10 @@ public class FilledGrapeWineController {
 
     }
 
-    @PostMapping("/combo")
-    public FilledGrapeWine addWine(@RequestParam String name, @RequestParam String region,
-                                   @RequestParam String country, @RequestParam double score, @RequestParam String grapeName) {
-        Wine wine =
-                restTemplate.postForObject("http://" + wineServiceBaseUrl + "/wines",
-                        new Wine(name, region, country, score, grapeName), Wine.class);
+    @DeleteMapping("/combo/{name}")
+    public ResponseEntity deleteWine(@PathVariable String name){
+        restTemplate.delete("http://" + wineServiceBaseUrl + "/wines/name/" + name);
 
-        Grape grape = restTemplate.getForObject("http://" + grapeServiceBaseUrl + "/grapes/grapename/{grapeName}",
-                Grape.class, grapeName);
-
-        return new FilledGrapeWine(grape, wine);
+        return ResponseEntity.ok().build();
     }
 }
