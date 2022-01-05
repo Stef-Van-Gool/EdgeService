@@ -6,6 +6,7 @@ import com.example.edgeservice.model.Wine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -90,9 +91,28 @@ public class FilledGrapeWineController {
         return returnList;
     }
 
+    @PutMapping("/wines")
+    public FilledGrapeWine updateScore(@RequestParam String name, double score){
+        Wine wine = restTemplate.getForObject("http://" + wineServiceBaseUrl + "/wines/name/{name}" + name,
+                Wine.class);
+        wine.setScore(score);
+
+        ResponseEntity<Wine> responseEntityWine =
+                restTemplate.exchange("http://" + wineServiceBaseUrl + "/wines", HttpMethod.PUT, new HttpEntity<>(wine), Wine.class);
+
+        Wine retrievedWine = responseEntityWine.getBody();
+
+        Grape grape =
+                restTemplate.getForObject("http://" + grapeServiceBaseUrl + "/grapes/grapename/{grapeName}",
+                        Grape.class, retrievedWine.getGrapeName());
+
+        return new FilledGrapeWine(grape, retrievedWine);
+
+    }
+
     @PostMapping("/combo")
     public FilledGrapeWine addWine(@RequestParam String name, @RequestParam String region,
-                                   @RequestParam String country, @RequestParam double score, @RequestParam String grapeName){
+                                   @RequestParam String country, @RequestParam double score, @RequestParam String grapeName) {
         Wine wine =
                 restTemplate.postForObject("http://" + wineServiceBaseUrl + "/wines",
                         new Wine(name, region, country, score, grapeName), Wine.class);
