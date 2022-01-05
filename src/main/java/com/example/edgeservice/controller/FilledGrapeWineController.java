@@ -9,10 +9,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -36,6 +33,25 @@ public class FilledGrapeWineController {
         Grape grape = restTemplate.getForObject("http://" + grapeServiceBaseUrl + "/grapes/grapename/{grapeName}",
                         Grape.class, wine.getGrapeName());
         return new FilledGrapeWine(grape, wine);
+    }
+
+    @GetMapping("/combo/wines")
+    public List<FilledGrapeWine> getWinesAndGrapes(){
+        List<FilledGrapeWine> returnList = new ArrayList<>();
+
+        ResponseEntity<List<Wine>> responseEntityWines =
+                restTemplate.exchange("http://" + wineServiceBaseUrl + "/wines",
+                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Wine>>() {
+                        });
+
+        List<Wine> wines = responseEntityWines.getBody();
+        for (Wine wine: wines) {
+            Grape grape =
+                    restTemplate.getForObject("http://" + grapeServiceBaseUrl + "/grapes/grapename/{grapeName}",
+                            Grape.class, wine.getGrapeName());
+            returnList.add(new FilledGrapeWine(grape, wine));
+        }
+        return returnList;
     }
 
     @GetMapping("/combo/region/{region}")
@@ -91,5 +107,19 @@ public class FilledGrapeWineController {
                         Grape.class, retrievedWine.getGrapeName());
 
         return new FilledGrapeWine(grape, retrievedWine);
+
+    }
+
+    @PostMapping("/combo")
+    public FilledGrapeWine addWine(@RequestParam String name, @RequestParam String region,
+                                   @RequestParam String country, @RequestParam double score, @RequestParam String grapeName) {
+        Wine wine =
+                restTemplate.postForObject("http://" + wineServiceBaseUrl + "/wines",
+                        new Wine(name, region, country, score, grapeName), Wine.class);
+
+        Grape grape = restTemplate.getForObject("http://" + grapeServiceBaseUrl + "/grapes/grapename/{grapeName}",
+                Grape.class, grapeName);
+
+        return new FilledGrapeWine(grape, wine);
     }
 }
