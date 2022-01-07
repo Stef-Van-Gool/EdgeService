@@ -105,7 +105,7 @@ public class FilledGrapeWineController {
     }
 
     @PutMapping("/combo")
-    public FilledGrapeWine updateScore(@RequestParam String name, double score){
+    public FilledGrapeWine updateScore(@RequestParam String name, @RequestParam double score){
         Wine wine = restTemplate.getForObject("http://" + wineServiceBaseUrl + "/wines/name/{name}" + name,
                 Wine.class);
         wine.setScore(score);
