@@ -1,7 +1,2 @@
-icon: https://apps.okteto.com/movies/icon.png
 deploy:
-  - okteto build -t okteto.dev/api:${OKTETO_GIT_COMMIT} https://github.com/Stef-Van-Gool/wine-service.git
-  - helm upgrade --install movies chart --set tag=${OKTETO_GIT_COMMIT}
-devs:
-  - api/okteto.yml
-  - frontend/okteto.yml
+  - kubectl apply –f deploy-edge.yaml
