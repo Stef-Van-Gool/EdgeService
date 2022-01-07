@@ -9,9 +9,6 @@ public class FilledGrapeWine {
     private Wine wine;
 
     //Constructors
-    public FilledGrapeWine() {
-    }
-
     public FilledGrapeWine(Grape grape, Wine wine) {
         setGrape(grape);
         setWine(wine);
