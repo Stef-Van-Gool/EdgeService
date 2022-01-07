@@ -5,35 +5,32 @@ import java.util.List;
 
 public class FilledGrapeWine {
     //variables
-    private String grapeName;
-    private List<Wine> wines;
+    private Grape grape;
+    private Wine wine;
 
     //Constructors
-    public FilledGrapeWine(Grape grape, List<Wine> wines) {
-        setGrapeName(grape.getGrapeName());
-        setWines(wines);
+    public FilledGrapeWine() {
     }
 
     public FilledGrapeWine(Grape grape, Wine wine) {
-        setGrapeName(grape.getGrapeName());
-        wines.add(wine);
-        setWines(wines);
+        setGrape(grape);
+        setWine(wine);
     }
 
     //Getters and setters
-    public String getGrapeName() {
-        return grapeName;
+    public Grape getGrape() {
+        return grape;
     }
 
-    public void setGrapeName(String grapeName) {
-        this.grapeName = grapeName;
+    public void setGrape(Grape grape) {
+        this.grape = grape;
     }
 
-    public List<Wine> getWines() {
-        return wines;
+    public Wine getWine() {
+        return wine;
     }
 
-    public void setWines(List<Wine> wines) {
-        this.wines = wines;
+    public void setWine(Wine wine) {
+        this.wine = wine;
     }
 }

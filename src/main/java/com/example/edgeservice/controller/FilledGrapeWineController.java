@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+@RestController
 public class FilledGrapeWineController {
     @Autowired
     private RestTemplate restTemplate;
@@ -27,8 +28,8 @@ public class FilledGrapeWineController {
 
     @GetMapping("/combo/wine/{name}")
     public FilledGrapeWine getGrapeByWine(@PathVariable String name){
-        Wine wine = restTemplate.getForObject("http://" + wineServiceBaseUrl + "/wines/name/{name}" + name,
-                Wine.class);
+        Wine wine = restTemplate.getForObject("http://" + wineServiceBaseUrl + "/wines/name/{name}",
+                Wine.class, name);
 
         Grape grape = restTemplate.getForObject("http://" + grapeServiceBaseUrl + "/grapes/grapename/{grapeName}",
                         Grape.class, wine.getGrapeName());
@@ -106,8 +107,8 @@ public class FilledGrapeWineController {
 
     @PutMapping("/combo")
     public FilledGrapeWine updateScore(@RequestParam String name, @RequestParam double score){
-        Wine wine = restTemplate.getForObject("http://" + wineServiceBaseUrl + "/wines/name/{name}" + name,
-                Wine.class);
+        Wine wine = restTemplate.getForObject("http://" + wineServiceBaseUrl + "/wines/name/{name}",
+                Wine.class, name);
         wine.setScore(score);
 
         ResponseEntity<Wine> responseEntityWine =

@@ -74,7 +74,7 @@ public class FilledGrapeWineControllerUnitTests {
 
         //GET Grape1 info
         mockServer.expect(ExpectedCount.once(),
-                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/TestGrape1")))
+                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/Testgrape1")))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -83,11 +83,14 @@ public class FilledGrapeWineControllerUnitTests {
         mockMvc.perform(get("/combo/wine/{name}", "Testwine1"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.grapeName", is("Testgrape1")))
-                .andExpect(jsonPath("$.region", is("Testregion1")))
-                .andExpect(jsonPath("$.country", is("Testcountry1")))
-                .andExpect(jsonPath("$.name", is("Testwine1")))
-                .andExpect(jsonPath("$.score", is(4.0)));
+                .andExpect(jsonPath("$.grape.grapeName", is("Testgrape1")))
+                .andExpect(jsonPath("$.grape.region", is("Testregion1")))
+                .andExpect(jsonPath("$.grape.country", is("Testcountry1")))
+                .andExpect(jsonPath("$.wine.name", is("Testwine1")))
+                .andExpect(jsonPath("$.wine.grapeName", is("Testgrape1")))
+                .andExpect(jsonPath("$.wine.region", is("Testregion1")))
+                .andExpect(jsonPath("$.wine.country", is("Testcountry1")))
+                .andExpect(jsonPath("$.wine.score", is(4.0)));
     }
 
     @Test
@@ -102,7 +105,7 @@ public class FilledGrapeWineControllerUnitTests {
 
         //GET Grape1 info
         mockServer.expect(ExpectedCount.once(),
-                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/TestGrape1")))
+                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/Testgrape1")))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -110,7 +113,7 @@ public class FilledGrapeWineControllerUnitTests {
 
         //GET Grape2 info
         mockServer.expect(ExpectedCount.once(),
-                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/TestGrape2")))
+                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/Testgrape2")))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -120,16 +123,23 @@ public class FilledGrapeWineControllerUnitTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].grapeName", is("Testgrape1")))
-                .andExpect(jsonPath("$[0].region", is("Testregion1")))
-                .andExpect(jsonPath("$[0].country", is("Testcountry1")))
-                .andExpect(jsonPath("$[0].name", is("Testwine1")))
-                .andExpect(jsonPath("$[0].score", is(4.0)))
-                .andExpect(jsonPath("$[1].grapeName", is("Testgrape2")))
-                .andExpect(jsonPath("$[1].region", is("Testregion2")))
-                .andExpect(jsonPath("$[1].country", is("Testcountry2")))
-                .andExpect(jsonPath("$[1].name", is("Testwine2")))
-                .andExpect(jsonPath("$[1].score", is(5.0)));
+                .andExpect(jsonPath("$[0].grape.grapeName", is("Testgrape1")))
+                .andExpect(jsonPath("$[0].grape.region", is("Testregion1")))
+                .andExpect(jsonPath("$[0].grape.country", is("Testcountry1")))
+                .andExpect(jsonPath("$[0].wine.name", is("Testwine1")))
+                .andExpect(jsonPath("$[0].wine.score", is(4.0)))
+                .andExpect(jsonPath("$[0].wine.grapeName", is("Testgrape1")))
+                .andExpect(jsonPath("$[0].wine.region", is("Testregion1")))
+                .andExpect(jsonPath("$[0].wine.country", is("Testcountry1")))
+
+                .andExpect(jsonPath("$[1].grape.grapeName", is("Testgrape2")))
+                .andExpect(jsonPath("$[1].grape.region", is("Testregion2")))
+                .andExpect(jsonPath("$[1].grape.country", is("Testcountry2")))
+                .andExpect(jsonPath("$[1].wine.name", is("Testwine2")))
+                .andExpect(jsonPath("$[1].wine.score", is(5.0)))
+                .andExpect(jsonPath("$[1].wine.grapeName", is("Testgrape2")))
+                .andExpect(jsonPath("$[1].wine.region", is("Testregion2")))
+                .andExpect(jsonPath("$[1].wine.country", is("Testcountry2")));
     }
 
     @Test
@@ -144,7 +154,7 @@ public class FilledGrapeWineControllerUnitTests {
 
         //GET Grape1 info
         mockServer.expect(ExpectedCount.once(),
-                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/TestGrape1")))
+                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/Testgrape1")))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -154,11 +164,14 @@ public class FilledGrapeWineControllerUnitTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].grapeName", is("Testgrape1")))
-                .andExpect(jsonPath("$[0].region", is("Testregion1")))
-                .andExpect(jsonPath("$[0].country", is("Testcountry1")))
-                .andExpect(jsonPath("$[0].name", is("Testwine1")))
-                .andExpect(jsonPath("$[0].score", is(4.0)));
+                .andExpect(jsonPath("$[0].grape.grapeName", is("Testgrape1")))
+                .andExpect(jsonPath("$[0].grape.region", is("Testregion1")))
+                .andExpect(jsonPath("$[0].grape.country", is("Testcountry1")))
+                .andExpect(jsonPath("$[0].wine.name", is("Testwine1")))
+                .andExpect(jsonPath("$[0].wine.region", is("Testregion1")))
+                .andExpect(jsonPath("$[0].wine.country", is("Testcountry1")))
+                .andExpect(jsonPath("$[0].wine.score", is(4.0)))
+                .andExpect(jsonPath("$[0].wine.grapeName", is("Testgrape1")));
     }
 
     @Test
@@ -173,7 +186,7 @@ public class FilledGrapeWineControllerUnitTests {
 
         //GET Grape1 info
         mockServer.expect(ExpectedCount.once(),
-                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/TestGrape1")))
+                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/Testgrape1")))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -183,11 +196,14 @@ public class FilledGrapeWineControllerUnitTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].grapeName", is("Testgrape1")))
-                .andExpect(jsonPath("$[0].region", is("Testregion1")))
-                .andExpect(jsonPath("$[0].country", is("Testcountry1")))
-                .andExpect(jsonPath("$[0].name", is("Testwine1")))
-                .andExpect(jsonPath("$[0].score", is(4.0)));
+                .andExpect(jsonPath("$[0].grape.grapeName", is("Testgrape1")))
+                .andExpect(jsonPath("$[0].grape.region", is("Testregion1")))
+                .andExpect(jsonPath("$[0].grape.country", is("Testcountry1")))
+                .andExpect(jsonPath("$[0].wine.name", is("Testwine1")))
+                .andExpect(jsonPath("$[0].wine.score", is(4.0)))
+                .andExpect(jsonPath("$[0].wine.grapeName", is("Testgrape1")))
+                .andExpect(jsonPath("$[0].wine.region", is("Testregion1")))
+                .andExpect(jsonPath("$[0].wine.country", is("Testcountry1")));
     }
 
     @Test
@@ -204,7 +220,7 @@ public class FilledGrapeWineControllerUnitTests {
 
         //GET Grape2 info
         mockServer.expect(ExpectedCount.once(),
-                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/TestGrape2")))
+                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/Testgrape2")))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -219,11 +235,14 @@ public class FilledGrapeWineControllerUnitTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.grapeName", is("Testgrape2")))
-                .andExpect(jsonPath("$.region", is("Testregion2")))
-                .andExpect(jsonPath("$.country", is("Testcountry2")))
-                .andExpect(jsonPath("$.name", is("Testwine3")))
-                .andExpect(jsonPath("$.score", is(3.0)));
+                .andExpect(jsonPath("$.grape.grapeName", is("Testgrape2")))
+                .andExpect(jsonPath("$.grape.region", is("Testregion2")))
+                .andExpect(jsonPath("$.grape.country", is("Testcountry2")))
+                .andExpect(jsonPath("$.wine.name", is("Testwine3")))
+                .andExpect(jsonPath("$.wine.score", is(3.0)))
+                .andExpect(jsonPath("$.wine.grapeName", is("Testgrape2")))
+                .andExpect(jsonPath("$.wine.region", is("Testregion2")))
+                .andExpect(jsonPath("$.wine.country", is("Testcountry2")));
     }
 
     @Test
@@ -248,7 +267,7 @@ public class FilledGrapeWineControllerUnitTests {
 
         //GET Grape1 info
         mockServer.expect(ExpectedCount.once(),
-                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/TestGrape1")))
+                requestTo(new URI("http://" + grapeServiceBaseurl + "/grapes/grapename/Testgrape1")))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -259,11 +278,14 @@ public class FilledGrapeWineControllerUnitTests {
                 .param("score", Double.toString(updatedWine1.getScore()))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.grapeName", is("Testgrape1")))
-                .andExpect(jsonPath("$.region", is("Testregion1")))
-                .andExpect(jsonPath("$.country", is("Testcountry1")))
-                .andExpect(jsonPath("$.name", is("Testwine1")))
-                .andExpect(jsonPath("$.score", is(3.0)));
+                .andExpect(jsonPath("$.grape.grapeName", is("Testgrape1")))
+                .andExpect(jsonPath("$.grape.region", is("Testregion1")))
+                .andExpect(jsonPath("$.grape.country", is("Testcountry1")))
+                .andExpect(jsonPath("$.wine.name", is("Testwine1")))
+                .andExpect(jsonPath("$.wine.score", is(3.0)))
+                .andExpect(jsonPath("$.wine.grapeName", is("Testgrape1")))
+                .andExpect(jsonPath("$.wine.region", is("Testregion1")))
+                .andExpect(jsonPath("$.wine.country", is("Testcountry1")));
     }
 
     @Test
